@@ -1,0 +1,5 @@
+#!/bin/bash
+
+java -cp ./copier.jar com.hds.tie.eng.copier.Main $1 $2
+
+

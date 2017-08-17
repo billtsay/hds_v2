@@ -1,0 +1,36 @@
+Add here your design description and execution instructions.
+
+The bin/run-copy $consumer-count $document-folder
+
+I made some changes:
+
+1. Both Consumer and Producer classes should be "implements"ed Runnable in order to execute as threads.
+
+2. The producer produces data and the line number, so I use new class DataLine to contain both.
+
+3. Use states to control the life cycle of Producer and Consumer. 
+For Producer, the three states are ready-for-read (READ) to read from file, 
+ready-for-get (GET) to allow consume data and done (DONE) for done job.
+For Consumer, the three states are ready-for-read (READ) to consume data from Producer,
+ready-for-write (WRITE) to write to file and done job (DONE).
+
+4. SynchFileWriter keeps track of line number, so Consumer can only submit data to it when it is ready
+for accepting this line number.
+
+5. conf/settings.props is used to configure line buffer size.
+
+6. The main idea for this approach is to use line number to synchronize writing content into file.
+
+7. The other alternative is that:
+
+  a. Consumer executes an atomic operation of consuming data and submitting it to FileWriter in ONE. 
+     then the line number is no longer needed.
+  b. But SynchFileWriter has to queue the submission of data in the order and write them to file in the
+     same order.
+  c. In this case, SynchFileWriter will be a Buffered FileWriter and an additional thread may be needed
+     to write buffers into file.   
+  
+
+Thanks!
+
+Bill
